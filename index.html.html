@@ -1,0 +1,149 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jane Doe - Resume</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <h1>VAISHNAVI SHUKLA</h1>
+      <p>Commerce Undergraduate</p>
+      <p>Gurgaon | vaishnavis2308@gmail.com | +91 9354187960 | www.linkedin.com/in/vaishnavishukla23</p>
+      <!--<a href="resume.pdf" class="download-btn" target="_blank">Download Resume</a>-->
+    </div>
+  </header>
+  <nav>
+    <ul>
+      <li><a href="#objective">Objective</a></li>
+      <!--<li><a href="#recommendation">Recommendation</a></li>-->
+      <li><a href="#skills">Skills</a></li>
+      <!--<li><a href="#internships">Internships</a></li>-->
+      <li><a href="#education">Education</a></li>
+      <li><a href="#Positions Of Responsibilty">Positions Of Responsibility</a></li>
+      <li><a href="#Interests and Hobbies">Interests and Hobbies</a></li>
+    </ul>
+  </nav>
+  <main>
+    <section id="objective" class="content-section">
+      <h2>Career Objective</h2>
+      <p>
+        I am dual-degree student pursuing B.Com (Hons) and BBA in Digital Business and Entrepreneurship, I am driven by my passion for accountancy, finance, and innovative business strategies. With a strong academic foundation and keen interest in both disciplines, I aim to pursue an MBA and excel as a consultant, delivering impactful financial and strategic solutions.</p>
+    <!--</section>
+    <section id="recommendation" class="content-section">
+      <h2>Recommendation</h2>
+      <p>"Jane consistently demonstrates strong analytical skills and a proactive approach to learning. She is well-prepared for a career in finance." - Prof. Sarah Johnson, Commerce Department</p>
+      <p><a href="https://example.com/video-testimonial" target="_blank">Watch Video Testimonial</a></p>-->
+    </section>
+    <section id="skills" class="content-section">
+      <h2>Skills</h2>
+      <div class="skills-list">
+        <span>Financial Analysis</span>
+        <span>Accounting </span>
+        <span>Microsoft Excel</span>
+        <span>Team Leadership</span>
+        <span>Effective Communication</span>
+      </div>
+    <!--</section>
+    <section id="internships" class="content-section">
+      <h2>Internships</h2>
+      <div class="entry">
+        <h3>Finance Intern, XYZ Ltd.</h3>
+        <p>New York, USA | Jun 2024 - Aug 2024</p>
+        <ul>
+          <li>Streamlined financial reporting processes, reducing errors by 15%.</li>
+          <li>Supported budget analysis, contributing to cost-saving initiatives.</li>
+        </ul>
+      </div>-->
+    </section>
+    <section id="education" class="content-section">
+      <h2>Education</h2>
+      <div class="entry">
+        <h3>Bachelor of Commerce (Honours) </h3>
+        <p>University of Delhi | 2024-2027</p>
+        <!--<p>CGPA: 3.8/4.0</p> -->
+        <h3>BBA in Digital Business and Entrepreneurship </h3>
+        <p>Indian Institute of Management Banagalore | 2024-2027</p>
+        <h3>ISC (Commerce with Maths) </h3>
+        <p>Scottish High International School, Gurugram, Haryana | 2024</p>
+        <p>90%</p>
+        <h3>ICSE </h3>
+        <p>Scottish High International School, Gurugram, Haryana | 2022</p>
+        <p>89%</p>
+      </div>
+    </section>
+    <section id="Positions Of Responsibility" class="content-section">
+      <h2>Positions Of Responsibility</h2>
+      <h3>Social Media Executive, 2024-25</h3>
+        <p>KAIZEN- The Commerce Department of Shivaji College</p>
+        <h3>Editorial Executive, 2024-25</h3>
+        <p>SPADE- Society for Practical Application and Development of Economics Society of Shivaji College</p>
+        <h3>Inclusive Education Captain, 2023-24 </h3>
+        <p>Student Council- Scottish High International School</p>
+        <h3>USG Logistics Head, 2023-24</h3>
+        <p>MUN Secretariat- Scottish High International School</p>
+      <ul>
+        
+      </section>
+      <section id="Interests and Hobbies" class="content-section">
+        <h2>Interests and Hobbies</h2>
+        <div class="entry">
+          <h3>Indian Classical Music</h3>
+          <p>5 years of training in Indian Classical Music from Akhil Bhartiya Gandharva Mahavidyalya, Mumbai</p>
+          <h3>Art and Craft</h3>
+            <p>Keen interest and art, craft and sketching. Previously used my skills by starting my 250rs venture of selling handmade bookmarks.</p>
+          <ul>
+            <!--<li>Streamlined financial reporting processes, reducing errors by 15%.</li>-->
+            <!--<li>Supported budget analysis, contributing to cost-saving initiatives.</li>-->
+    
+          </ul>
+        </div>
+      </ul>
+    </section>
+  </main>
+  <footer>
+    <p>© 2025 VAISHNAVI SHUKLA </p>
+  </footer>
+</body>
+</html>
